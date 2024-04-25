@@ -142,3 +142,37 @@ class fzf_locate(Command):
                 self.fm.cd(fzf_file)
             else:
                 self.fm.select_file(fzf_file)
+
+
+
+from ranger.api.commands import Command
+import os
+from datetime import datetime
+
+class mkdir_date(Command):
+    """
+    :mkdir_date
+
+    Creates a directory named with the current date and time in the format YYYY-MM-DD-HH-MM-SS
+    in the current directory.
+    """
+
+    def execute(self):
+        # Generate the directory name
+        dir_name = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
+        
+        # Get the current path
+        current_path = self.fm.thisdir.path
+        
+        # Create the full path for the new directory
+        full_path = os.path.join(current_path, dir_name)
+        
+        # Create the directory
+        os.makedirs(full_path, exist_ok=True)
+        
+        # Optionally, you can navigate into the directory
+        self.fm.cd(full_path)
+
+        # Display a message in ranger
+        self.fm.notify("Directory created: " + dir_name, bad=False)
+
